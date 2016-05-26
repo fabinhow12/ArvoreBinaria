@@ -9,13 +9,13 @@ package arvorebinaria;
  *
  * @author walison
  */
-public class No {
+public class No<V> {
 
-    private String valor;
+    private V valor;
     private int id;
     private No esquerdo, direito;
 
-    public No(String valor, int id) {
+    public No(V valor, int id) {
         this.valor = valor;
         this.id = id;
     }
@@ -28,11 +28,11 @@ public class No {
         this.id = id;
     }
 
-    public String getValor() {
+    public V getValor() {
         return valor;
     }
 
-    public void setValor(String valor) {
+    public void setValor(V valor) {
         this.valor = valor;
     }
 

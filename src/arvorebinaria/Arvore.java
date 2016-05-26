@@ -9,7 +9,7 @@ package arvorebinaria;
  *
  * @author walison
  */
-public class Arvore {
+public class Arvore<V> {
 
     private No raiz;
 
@@ -25,9 +25,9 @@ public class Arvore {
         return this.raiz == null;
     }
 
-    private void adicionarNo(No novo, No parente) throws IllegalArgumentException {
+    private void adicionarNo(No novo, No parente) {
         if (novo.getId() == parente.getId()) {
-            throw new IllegalArgumentException("O id informado está em uso");
+            System.out.println("ja existe um no com o mesmo id");
 
         } else if (novo.getId() < parente.getId()) {
             if (parente.getEsquerdo() == null) {
@@ -36,17 +36,23 @@ public class Arvore {
                 this.adicionarNo(novo, parente.getEsquerdo()); //recursividade
             }
 
-        } else if (parente.getDireito() == null) {
-            parente.setDireito(novo);
-
+        } else if (novo.getId() > parente.getId()) {
+            if (parente.getDireito() == null) {
+                parente.setDireito(novo);
+            } else {
+                this.adicionarNo(novo, parente.getDireito());
+            }
         } else {
-            this.adicionarNo(novo, parente.getDireito());
+            
         }
     }
 
-    public void adicionar(String elemento, int id) {
-        No novo = new No(elemento, id);
-        this.adicionarNo(novo, this.raiz);
+    public void adicionar(V elemento, int id) {
+        if (this.raiz == null) {
+            this.raiz = new No(elemento, id);
+        } else {
+            this.adicionarNo(new No(elemento, id), this.raiz);
+        }
     }
 
     public No pesquisar(int id) {
@@ -65,7 +71,7 @@ public class Arvore {
         return null;
     }
 
-    private No pegarParente(int id) {
+    public No pegarParente(int id) {
         No aux = this.raiz;
 
         while (aux != null) {
@@ -83,7 +89,8 @@ public class Arvore {
         return null;
     }
 
-    private No pegarSucessor(No no) {
+    //pega o maior valor da subarvore da esquerda 
+    public No pegarSucessor(No no) {
         No aux = no.getEsquerdo();
 
         while (aux != null) {
@@ -134,8 +141,8 @@ public class Arvore {
                     parente.setDireito(noParaDeletar.getDireito());
                 }
 
-            } else // raiz 
-            {
+            } else {
+                
                 if (noParaDeletar.getEsquerdo() != null) {
                     this.raiz = noParaDeletar.getEsquerdo();
                 } else {
@@ -189,17 +196,25 @@ public class Arvore {
             this.raiz = sucessor;
         }
     }
-    
+
     private void imprimirArvore(No n) {
         if (n.getEsquerdo() != null) {
             imprimirArvore(n.getEsquerdo());
-        } 
+        }
         if (n.getDireito() != null) {
             imprimirArvore(n.getDireito());
         }
-        
-        System.out.println("Nó: " + n.getId() + ", valor: "+ n.getValor());
-        
+
+        System.out.println("Nó: " + n.getId() + ", valor: " + n.getValor());
+
     }
 
+    public void imprimirArvore() {
+        this.imprimirArvore(this.raiz);
+    }
+
+    public void apagarTudo() {
+        this.raiz = null;
+    }
+    
 }
