@@ -43,7 +43,7 @@ public class Arvore<V> {
                 this.adicionarNo(novo, parente.getDireito());
             }
         } else {
-            
+
         }
     }
 
@@ -142,7 +142,7 @@ public class Arvore<V> {
                 }
 
             } else {
-                
+
                 if (noParaDeletar.getEsquerdo() != null) {
                     this.raiz = noParaDeletar.getEsquerdo();
                 } else {
@@ -150,50 +150,53 @@ public class Arvore<V> {
                 }
             }
 
-        } else if (noParaDeletar == parente.getEsquerdo()) {
-            No sucessor = this.pegarSucessor(noParaDeletar.getEsquerdo());
-            No parenteSucessor = this.pegarParente(sucessor.getId());
+        } else if (noParaDeletar.quantidadeFilhos() == 2) {
 
-            if (parenteSucessor != noParaDeletar) {
-                parenteSucessor.setDireito(sucessor.getEsquerdo());
+            if (noParaDeletar == parente.getEsquerdo()) {
+                No sucessor = this.pegarSucessor(noParaDeletar.getEsquerdo());
+                No parenteSucessor = this.pegarParente(sucessor.getId());
+
+                if (parenteSucessor != noParaDeletar) {
+                    parenteSucessor.setDireito(sucessor.getEsquerdo());
+                }
+
+                if (noParaDeletar.getEsquerdo() != sucessor) {
+                    sucessor.setEsquerdo(noParaDeletar.getEsquerdo());
+                }
+                sucessor.setDireito(noParaDeletar.getDireito());
+
+                parente.setEsquerdo(sucessor);
+
+            } else if (noParaDeletar == parente.getDireito()) {
+                No sucessor = this.pegarSucessor(noParaDeletar.getEsquerdo());
+                No parenteSucessor = this.pegarParente(sucessor.getId());
+
+                if (parenteSucessor != noParaDeletar) {
+                    parenteSucessor.setDireito(sucessor.getEsquerdo());
+                }
+
+                if (noParaDeletar.getEsquerdo() != sucessor) {
+                    sucessor.setEsquerdo(noParaDeletar.getEsquerdo());
+                }
+                sucessor.setDireito(noParaDeletar.getDireito());
+
+                parente.setDireito(sucessor);
+
+            } else { //raiz
+                No sucessor = this.pegarSucessor(noParaDeletar.getDireito());
+                No parenteSucessor = this.pegarParente(sucessor.getId());
+
+                if (parenteSucessor != noParaDeletar) {
+                    parenteSucessor.setDireito(sucessor.getEsquerdo());
+                }
+
+                if (noParaDeletar.getEsquerdo() != sucessor) {
+                    sucessor.setEsquerdo(noParaDeletar.getEsquerdo());
+                }
+                sucessor.setDireito(noParaDeletar.getDireito());
+
+                this.raiz = sucessor;
             }
-
-            if (noParaDeletar.getEsquerdo() != sucessor) {
-                sucessor.setEsquerdo(noParaDeletar.getEsquerdo());
-            }
-            sucessor.setDireito(noParaDeletar.getDireito());
-
-            parente.setEsquerdo(sucessor);
-
-        } else if (noParaDeletar == parente.getDireito()) {
-            No sucessor = this.pegarSucessor(noParaDeletar.getEsquerdo());
-            No parenteSucessor = this.pegarParente(sucessor.getId());
-
-            if (parenteSucessor != noParaDeletar) {
-                parenteSucessor.setDireito(sucessor.getEsquerdo());
-            }
-
-            if (noParaDeletar.getEsquerdo() != sucessor) {
-                sucessor.setEsquerdo(noParaDeletar.getEsquerdo());
-            }
-            sucessor.setDireito(noParaDeletar.getDireito());
-
-            parente.setDireito(sucessor);
-
-        } else { //raiz
-            No sucessor = this.pegarSucessor(noParaDeletar.getDireito());
-            No parenteSucessor = this.pegarParente(sucessor.getId());
-
-            if (parenteSucessor != noParaDeletar) {
-                parenteSucessor.setDireito(sucessor.getEsquerdo());
-            }
-
-            if (noParaDeletar.getEsquerdo() != sucessor) {
-                sucessor.setEsquerdo(noParaDeletar.getEsquerdo());
-            }
-            sucessor.setDireito(noParaDeletar.getDireito());
-
-            this.raiz = sucessor;
         }
     }
 
@@ -216,5 +219,33 @@ public class Arvore<V> {
     public void apagarTudo() {
         this.raiz = null;
     }
-    
+
+    public void imprimirEspecial() {
+
+        No aux = this.raiz;
+
+        if (aux.quantidadeFilhos() == 0) {
+            System.out.println("( " + aux.getValor() + ")");
+            
+        } else if (aux.quantidadeFilhos() == 1) {
+            No parente = this.pegarParente(aux.getId());
+
+            if (parente.getEsquerdo() != null) {
+                System.out.println("( " + aux.getValor() + ")");
+                System.out.println("/");
+                System.out.println("( " + aux.getEsquerdo().getValor() + ")");
+
+            } else {
+                System.out.println("'\'");
+                System.out.println("( " + aux.getDireito().getValor() + ")");
+            }
+
+        } else if (aux.quantidadeFilhos() == 2) {
+            System.out.println("           (" + aux.getValor() + ")");
+            System.out.println("      /                   \\");
+            System.out.println("(" + aux.getEsquerdo().getValor() + ")              ("+ aux.getDireito().getValor() + ")");
+        }
+
+    }
+
 }
